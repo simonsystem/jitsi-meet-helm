@@ -33,10 +33,6 @@ spec:
           image: {{ printf "%s:%s" $root.Values.jvb.image.repository $root.Values.jvb.image.tag | quote }}
           imagePullPolicy: {{ $root.Values.jvb.image.pullPolicy | quote }}
           securityContext:
-            capabilities:
-              add:
-                - SYS_RESOURCE
-                - NET_ADMIN
           {{- with $root.Values.jvb.podSecurityContext }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
