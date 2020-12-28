@@ -3,7 +3,7 @@
 {{- range $index, $nbr := until (.Values.prosody.replicaCount | int) }}
 ---
 {{- $depName := printf "%s-%d" $name $nbr -}}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $depName | quote }}
