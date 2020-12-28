@@ -132,6 +132,9 @@ jvb:
     name: "jvb"
     secret: ""
 
+common:
+  environment: []
+
 ingressControllerNamespace: ""
 
 serviceAccount:
