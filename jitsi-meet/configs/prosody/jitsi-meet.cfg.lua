@@ -41,6 +41,8 @@ VirtualHost "{{ .Env.XMPP_DOMAIN }}"
     }
     modules_enabled = {
         "bosh";
+        "websocket";
+        "smacks";
         "pubsub";
         "ping";
         "speakerstats";
@@ -86,6 +88,8 @@ Component "{{ .Env.XMPP_INTERNAL_MUC_DOMAIN }}" "muc"
     }
     storage = "memory"
     muc_room_cache_size = 1000
+    muc_room_locking = false
+    muc_room_default_public_jids = true
 Component "{{ .Env.XMPP_MUC_DOMAIN }}" "muc"
     storage = "memory"
     modules_enabled = {
