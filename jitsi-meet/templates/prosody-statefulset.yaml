@@ -85,17 +85,19 @@ spec:
             - containerPort: 5347
               protocol: TCP
               name: xmpp
-          # lifecycle:
-          #   postStart:
-          #     exec:
-          #       command:
-          #         - /bin/bash
-          #         - -c
-          #         - cat /var/app/prosody.cfg.lua | base64 -d > /defaults/prosody.cfg.lua
-          #         - cat /var/app/jitsi-meet.cfg.lua | base64 -d > /defaults/conf.d/jitsi-meet.cfg.lua
-          #         # {{ if .Values.prosody.auth.enabled }}
-          #         # - prosodyctl --config /config/prosody.cfg.lua register me $XMPP_DOMAIN $JVB_AUTH_PASSWORD;
-          #         # {{ end }}
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -e
+                  - -c
+                  - |
+                    base64 -d /var/app/prosody.cfg.lua > /defaults/prosody.cfg.lua
+                    base64 -d /var/app/jitsi-meet.cfg.lua > /defaults/conf.d/jitsi-meet.cfg.lua
+                  # {{ if .Values.prosody.auth.enabled }}
+                  # - prosodyctl --config /config/prosody.cfg.lua register me $XMPP_DOMAIN $JVB_AUTH_PASSWORD;
+                  # {{ end }}
           resources:
             {{- toYaml .Values.prosody.resources | nindent 12 }}
           volumeMounts:
@@ -143,13 +145,14 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.jicofo.resources | nindent 12 }}
-          # lifecycle:
-          #   postStart:
-          #     exec:
-          #       command:
-          #         - /bin/bash
-          #         - -c
-          #         - cp /var/app/sip-communicator.properties /defaults/sip-communicator.properties
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -e
+                  - -c
+                  - cp /var/app/sip-communicator.properties /defaults/sip-communicator.properties
           volumeMounts:
             - name: config-jicofo
               mountPath: "/var/app"
