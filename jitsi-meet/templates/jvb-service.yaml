@@ -14,8 +14,8 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  type: NodePort
-  externalTrafficPolicy: Local
+  type: {{ $root.Values.jvb.service.type }}
+  externalTrafficPolicy: {{ $root.Values.jvb.service.externalTrafficPolicy }}
   sessionAffinity: {{ $root.Values.jvb.service.sessionAffinity }}
   {{- if $root.Values.jvb.service.sessionAffinityConfig }}
   {{- toYaml $root.Values.jvb.service.sessionAffinityConfig }}
