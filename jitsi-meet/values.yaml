@@ -17,6 +17,7 @@ web:
       value: false
   replicaCount: 1
   jwtsidecar:
+    enabled: true
     extraArgs: {}
     resources: {}
   hpa:
