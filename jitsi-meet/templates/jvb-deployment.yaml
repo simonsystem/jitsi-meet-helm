@@ -87,8 +87,8 @@ spec:
               mountPath: "/var/run/docker.sock"
             - name: config
               mountPath: "/defaults"
-            {{- if .Values.jvb.extraVolumeMounts }}
-              {{- toYaml .Values.jvb.extraVolumeMounts | indent 12 }}
+            {{- if $root.Values.jvb.extraVolumeMounts }}
+              {{- toYaml $root.Values.jvb.extraVolumeMounts | indent 12 }}
             {{- end }}
           resources:
             {{- toYaml $root.Values.jvb.resources | nindent 12 }}
@@ -99,8 +99,8 @@ spec:
         - name: config
           configMap:
             name: {{ template "jitsi-meet.name-jvb-config" $root }}-cm
-        {{- if .Values.jvb.extraVolumes }}
-          {{- toYaml .Values.jvb.extraVolumes | indent 8 }}
+        {{- if $root.Values.jvb.extraVolumes }}
+          {{- toYaml $root.Values.jvb.extraVolumes | indent 8 }}
         {{- end }}
       {{- with $root.Values.jvb.nodeSelector }}
       nodeSelector:
