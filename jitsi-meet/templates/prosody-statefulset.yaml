@@ -103,6 +103,9 @@ spec:
           volumeMounts:
             - name: config-prosody
               mountPath: "/var/app"
+            {{- if .Values.prosody.extraVolumeMounts }}
+              {{- toYaml .Values.prosody.extraVolumeMounts | indent 12 }}
+            {{- end }}
         - name: {{ include "jitsi-meet.name-jicofo" . }}
           image: "{{ .Values.jicofo.image.repository }}:{{ .Values.jicofo.image.tag }}"
           imagePullPolicy: {{ .Values.jicofo.image.pullPolicy }}
@@ -156,6 +159,9 @@ spec:
           volumeMounts:
             - name: config-jicofo
               mountPath: "/var/app"
+            {{- if .Values.jicofo.extraVolumeMounts }}
+              {{- toYaml .Values.jicofo.extraVolumeMounts | indent 12 }}
+            {{- end }}
         {{ if .Values.prosody.recorder }}
         - name: {{ include "jitsi-meet.name-jibri" . }}
           image: "{{ .Values.jibri.image.repository }}:{{ .Values.jibri.image.tag }}"
@@ -186,6 +192,9 @@ spec:
               name: shm
             - mountPath: /dev/snd
               name: dev-snd
+            {{- if .Values.jibri.extraVolumeMounts }}
+              {{- toYaml .Values.jibri.extraVolumeMounts | indent 12 }}
+            {{- end }}
         {{ end }}
       volumes:
         - name: config-jicofo
@@ -202,6 +211,9 @@ spec:
           hostPath:
             path: /dev/snd
         {{ end }}
+        {{- if .Values.prosody.extraVolumes }}
+          {{- toYaml .Values.prosody.extraVolumes | indent 8 }}
+        {{- end }}
       {{- with .Values.prosody.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
