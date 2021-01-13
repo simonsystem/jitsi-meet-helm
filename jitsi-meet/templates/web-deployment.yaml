@@ -84,7 +84,7 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
-      {{- with .Values.wen.extraVolumes }}
+      {{- with .Values.web.extraVolumes }}
       volumes:
         {{- toYaml . | indent 8 }}
       {{- end }}
