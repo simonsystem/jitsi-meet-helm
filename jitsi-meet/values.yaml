@@ -42,6 +42,8 @@ web:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  extraVolumeMounts: []
+  extraVolumes: []
 
 jibri:
   image:
@@ -50,6 +52,8 @@ jibri:
     pullPolicy: Always
   environment: []
   resources: {}
+  extraVolumeMounts: []
+  extraVolumes: []
 
 prosody:
   auth:
@@ -88,6 +92,8 @@ prosody:
   tolerations: []
   affinity: {}
   recorder: false
+  extraVolumeMounts: []
+  extraVolumes: []
 
 jicofo: # jicofo is used as a sidecar container for every prosody instance
   image:
@@ -131,6 +137,8 @@ jvb:
     enabled: false
     name: "jvb"
     secret: ""
+  extraVolumeMounts: []
+  extraVolumes: []
 
 ingressControllerNamespace: ""
 

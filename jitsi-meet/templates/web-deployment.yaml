@@ -70,6 +70,10 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          {{- with .Values.web.extraVolumeMounts }}
+          volumeMounts:
+              {{- toYaml . | indent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -80,6 +84,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
+      {{- with .Values.wen.extraVolumes }}
+      volumes:
+        {{- toYaml . | indent 8 }}
+      {{- end }}
       {{- with .Values.web.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
