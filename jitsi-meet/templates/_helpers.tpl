@@ -47,31 +47,10 @@ Create the jicofo cmp name
 {{- end -}}
 
 {{/*
-Create the jicofo config name
-*/}}
-{{- define "jitsi-meet.name-jicofo-config" -}}
-{{- printf "%s-%s" .Chart.Name "jicofo-config" | trunc 63 -}}
-{{- end -}}
-
-{{/*
 Create the jvb server name
 */}}
 {{- define "jitsi-meet.name-jvb" -}}
 {{- printf "%s-%s" .Chart.Name "jvb" | trunc 63 -}}
-{{- end -}}
-
-{{/*
-Create the jvb config name
-*/}}
-{{- define "jitsi-meet.name-jvb-config" -}}
-{{- printf "%s-%s" .Chart.Name "jvb-config" | trunc 63 -}}
-{{- end -}}
-
-{{/*
-Create the sidecar name for jwt auth
-*/}}
-{{- define "jitsi-meet.name-jwt-sidecar" -}}
-{{- printf "%s-%s" .Chart.Name "jwt" | trunc 63 -}}
 {{- end -}}
 
 {{/*

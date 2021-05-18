@@ -37,37 +37,6 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            - name: XMPP_SERVER
-              value: {{ include "jitsi-meet.name-prosody" $root }}
-            - name: PROSODY_INSTANCE
-              value: {{ printf "%d" $nbr | quote }}
-            {{- if $root.Values.jicofo.userAuth.enabled }}
-            - name: JICOFO_AUTH_USER
-              value: {{ $root.Values.jicofo.userAuth.name }}
-            - name: JICOFO_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "jitsi-meet.name-jicofo-config" $root }}
-                  key: JICOFO_AUTH_PASSWORD
-            {{- end }}
-            {{- if $root.Values.jvb.userAuth.enabled }}
-            - name: JVB_AUTH_USER
-              value: {{ $root.Values.jvb.userAuth.name }}
-            - name: JVB_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "jitsi-meet.name-jvb-config" $root }}
-                  key: JVB_AUTH_PASSWORD
-            {{- end }}
-            {{- if $root.Values.jicofo.componentSecret }}
-            - name: JICOFO_COMPONENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" $root }}
-                  key: JICOFO_COMPONENT_SECRET
-            {{- end }}
-            - name: JVB_PORT
-              value: {{ printf "%s%s" "3030" (toString $nbr) | quote }}
             {{- with $root.Values.jvb.environment }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -81,8 +50,6 @@ spec:
           volumeMounts:
             - name: dockersock
               mountPath: "/var/run/docker.sock"
-            - name: config
-              mountPath: "/defaults"
             {{- if $root.Values.jvb.extraVolumeMounts }}
               {{- toYaml $root.Values.jvb.extraVolumeMounts | indent 12 }}
             {{- end }}
@@ -92,9 +59,6 @@ spec:
         - name: dockersock
           hostPath:
             path: /var/run/docker.sock
-        - name: config
-          configMap:
-            name: {{ template "jitsi-meet.name-jvb-config" $root }}-cm
         {{- if $root.Values.jvb.extraVolumes }}
           {{- toYaml $root.Values.jvb.extraVolumes | indent 8 }}
         {{- end }}

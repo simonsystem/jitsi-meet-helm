@@ -31,39 +31,6 @@ spec:
           image: "{{ .Values.prosody.image.repository }}:{{ .Values.prosody.image.tag }}"
           imagePullPolicy: {{ .Values.prosody.image.pullPolicy }}
           env:
-            {{ if .Values.jicofo.userAuth.enabled }}
-            - name: JICOFO_AUTH_USER
-              value: "{{ .Values.jicofo.userAuth.name }}"
-            - name: JICOFO_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" . }}
-                  key: JICOFO_AUTH_PASSWORD
-            {{ end }}
-            {{ if .Values.jicofo.componentSecret }}
-            - name: JICOFO_COMPONENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" . }}
-                  key: JICOFO_COMPONENT_SECRET
-            {{ end }}
-            {{- if .Values.jvb.userAuth.enabled }}
-            - name: JVB_AUTH_USER
-              value: {{ .Values.jvb.userAuth.name }}
-            - name: JVB_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "jitsi-meet.name-jvb-config" . }}
-                  key: JVB_AUTH_PASSWORD
-            {{- end }}
-            {{- if .Values.prosody.auth.enabled }}
-            - name: ENABLE_AUTH
-              value: "1"
-            - name: ENABLE_GUESTS
-              value: {{ .Values.prosody.auth.guest | quote }}
-            - name: AUTH_TYPE
-              value: {{ .Values.prosody.auth.type | quote }}
-            {{- end }}
             {{- range .Values.prosody.environment }}
             - name: {{ .name | quote }}
               value: {{ .value | quote }}
@@ -85,24 +52,9 @@ spec:
             - containerPort: 5347
               protocol: TCP
               name: xmpp
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -e
-                  - -c
-                  - |
-                    base64 -d /var/app/prosody.cfg.lua > /defaults/prosody.cfg.lua
-                    base64 -d /var/app/jitsi-meet.cfg.lua > /defaults/conf.d/jitsi-meet.cfg.lua
-                  # {{ if .Values.prosody.auth.enabled }}
-                  # - prosodyctl --config /config/prosody.cfg.lua register me $XMPP_DOMAIN $JVB_AUTH_PASSWORD;
-                  # {{ end }}
           resources:
             {{- toYaml .Values.prosody.resources | nindent 12 }}
           volumeMounts:
-            - name: config-prosody
-              mountPath: "/var/app"
             {{- if .Values.prosody.extraVolumeMounts }}
               {{- toYaml .Values.prosody.extraVolumeMounts | indent 12 }}
             {{- end }}
@@ -116,28 +68,8 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            {{ if .Values.jicofo.userAuth.enabled }}
-            - name: JICOFO_AUTH_USER
-              value: {{ .Values.jicofo.userAuth.name }}
-            - name: JICOFO_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" . }}
-                  key: JICOFO_AUTH_PASSWORD
-            {{ end }}
-            {{ if .Values.jicofo.componentSecret }}
-            - name: JICOFO_COMPONENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" . }}
-                  key: JICOFO_COMPONENT_SECRET
-            {{ end }}
             - name: XMPP_SERVER
               value: "localhost"
-            {{- if .Values.prosody.auth.enabled }}
-            - name: ENABLE_AUTH
-              value: "1"
-            {{- end }}
             {{- range .Values.jicofo.environment }}
             - name: {{ .name | quote }}
               value: {{ .value | quote }}
@@ -148,17 +80,7 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.jicofo.resources | nindent 12 }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -e
-                  - -c
-                  - cp /var/app/sip-communicator.properties /defaults/sip-communicator.properties
           volumeMounts:
-            - name: config-jicofo
-              mountPath: "/var/app"
             {{- if .Values.jicofo.extraVolumeMounts }}
               {{- toYaml .Values.jicofo.extraVolumeMounts | indent 12 }}
             {{- end }}
@@ -197,12 +119,6 @@ spec:
             {{- end }}
         {{ end }}
       volumes:
-        - name: config-jicofo
-          configMap:
-            name: {{ template "jitsi-meet.name-jicofo-config" . }}-cm
-        - name: config-prosody
-          configMap:
-            name: {{ template "jitsi-meet.name-prosody" . }}-config-cm
         {{ if .Values.prosody.recorder }}
         - name: shm
           hostPath:

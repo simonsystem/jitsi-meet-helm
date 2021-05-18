@@ -32,30 +32,6 @@ spec:
           env:
             - name: XMPP_SERVER
               value: {{ include "jitsi-meet.name-prosody" . }}
-            {{- if .Values.jicofo.userAuth.enabled }}
-            - name: JICOFO_AUTH_USER
-              value: {{ .Values.jicofo.userAuth.name }}
-            - name: JICOFO_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jitsi-meet.name-jicofo-config" . }}
-                  key: JICOFO_AUTH_PASSWORD
-            {{- end }}
-            {{- if .Values.jvb.userAuth.enabled }}
-            - name: JVB_AUTH_USER
-              value: {{ .Values.jvb.userAuth.name }}
-            - name: JVB_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "jitsi-meet.name-jvb-config" . }}
-                  key: JVB_AUTH_PASSWORD
-            {{- end }}
-            {{- if .Values.prosody.auth.enabled }}
-            - name: ENABLE_AUTH
-              value: "1"
-            - name: ENABLE_GUESTS
-              value: {{ .Values.prosody.auth.guest | quote }}
-            {{- end }}
             - name: XMPP_BOSH_URL_BASE
               value: "http://{{ include "jitsi-meet.name-prosody" . }}:5280"
             {{- range .Values.web.environment }}
