@@ -37,6 +37,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            - name: XMPP_SERVER
+              value: {{ include "jitsi-meet.name-prosody" $root }}
+            - name: PROSODY_INSTANCE
+              value: {{ printf "%d" $nbr | quote }}
+            - name: JVB_PORT
+              value: {{ printf "%s%s" "3030" (toString $nbr) | quote }}
             {{- with $root.Values.jvb.environment }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
