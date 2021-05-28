@@ -24,10 +24,12 @@ spec:
   ports:
   - port: {{ atoi $port }}
     protocol: UDP
+    name: video
     targetPort: video
     nodePort: {{ atoi $port }}
   - port: {{ atoi $tcpPort }}
     protocol: TCP
+    name: video-tcp
     targetPort: video-tcp
     nodePort: {{ atoi $tcpPort }}
   selector:
