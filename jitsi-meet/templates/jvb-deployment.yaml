@@ -43,6 +43,12 @@ spec:
               value: {{ printf "%d" $nbr | quote }}
             - name: JVB_PORT
               value: {{ printf "%s%s" "3030" (toString $nbr) | quote }}
+            - name: TCP_HARVESTER_PORT
+              value: {{ printf "%s%s" "3040" (toString $nbr) | quote }}
+            - name: TCP_HARVESTER_MAPPED_PORT
+              value: {{ printf "%s%s" "3040" (toString $nbr) | quote }}
+            - name: JVB_TCP_HARVESTER_DISABLED
+              value: "false"
             {{- with $root.Values.jvb.environment }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -53,6 +59,9 @@ spec:
             - name: video
               containerPort: {{ printf "%s%s" "3030" (toString $nbr) | int }}
               protocol: UDP
+            - name: video-tcp
+              containerPort: {{ printf "%s%s" "3040" (toString $nbr) | int }}
+              protocol: TCP
           volumeMounts:
             - name: dockersock
               mountPath: "/var/run/docker.sock"

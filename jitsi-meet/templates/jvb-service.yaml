@@ -2,6 +2,7 @@
 {{- $name := include "jitsi-meet.name-jvb" $root }}
 {{- range $index, $nbr := until (.Values.prosody.replicaCount | int) }}
 {{- $port := printf "%s%s" "3030" (toString $nbr) }}
+{{- $tcpPort := printf "%s%s" "3040" (toString $nbr) }}
 {{- $target := printf "%s-%d" $name $nbr}}
 apiVersion: v1
 kind: Service
@@ -25,6 +26,10 @@ spec:
     protocol: UDP
     targetPort: video
     nodePort: {{ atoi $port }}
+  - port: {{ atoi $tcpPort }}
+    protocol: TCP
+    targetPort: video-tcp
+    nodePort: {{ atoi $tcpPort }}
   selector:
     app.kubernetes.io/name: {{ $target | quote }}
     app.kubernetes.io/instance: {{ $root.Release.Name }}
