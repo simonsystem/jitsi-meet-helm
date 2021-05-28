@@ -43,9 +43,9 @@ spec:
               value: {{ printf "%d" $nbr | quote }}
             - name: JVB_PORT
               value: {{ printf "%s%s" "3030" (toString $nbr) | quote }}
-            - name: TCP_HARVESTER_PORT
+            - name: JVB_TCP_PORT
               value: {{ printf "%s%s" "3040" (toString $nbr) | quote }}
-            - name: TCP_HARVESTER_MAPPED_PORT
+            - name: JVB_TCP_MAPPED_PORT
               value: {{ printf "%s%s" "3040" (toString $nbr) | quote }}
             - name: JVB_TCP_HARVESTER_DISABLED
               value: "false"
